@@ -5,7 +5,8 @@
   "main": "src/actioncable.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/.bin/nyc --reporter=clover --reporter=lcov --reporter=text ./node_modules/.bin/mocha --reporter spec --level info test/*.test.js"
+    "test": "NODE_ENV=test ./node_modules/.bin/nyc --reporter=clover --reporter=lcov --reporter=text ./node_modules/.bin/mocha --reporter spec --level info test/*.test.js",
+    "lint": "./node_modules/.bin/eslint ./{src,test}/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "eslint": "^6.8.0",
     "istanbul": "^0.4.5",
     "mocha": "^6.2.2",
     "nyc": "^15.0.0",
