@@ -42,6 +42,18 @@ class ActionCable {
     return this.subscriptions[name];
   }
 
+  unsubscribe (subscription_name) {
+    this.subscriptions[subscription_name].unsubscribe();
+    delete this.subscriptions[subscription_name];
+  }
+
+  disconnect () {
+    for (const subscription_name in this.subscriptions) {
+      this.unsubscribe(subscription_name);
+    }
+    this.connection.close();
+  }
+
   // PRIVATE
 
   _connect() {
