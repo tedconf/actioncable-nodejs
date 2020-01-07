@@ -43,8 +43,10 @@ class ActionCable {
   }
 
   unsubscribe (subscription_name) {
-    this.subscriptions[subscription_name].unsubscribe();
-    delete this.subscriptions[subscription_name];
+    if (this.subscriptions.subscription_name) {
+      this.subscriptions[subscription_name].unsubscribe();
+      delete this.subscriptions[subscription_name];
+    }
   }
 
   disconnect () {
