@@ -2,16 +2,16 @@ const WebSocket = require('ws');
 const Subscription = require('./subscription.js');
 
 const message_types = {
-  welcome: "welcome",
-  ping: "ping",
-  confirmation: "confirm_subscription",
-  rejection: "reject_subscription"
+  welcome: 'welcome',
+  ping: 'ping',
+  confirmation: 'confirm_subscription',
+  rejection: 'reject_subscription'
 };
 
 class ActionCable {
-  constructor(url, opts) {
+  constructor (url, opts) {
     this.cable_url = url;
-    this.origin = opts.origin || "http://localhost:3000";
+    this.origin = opts.origin || 'http://localhost:3000';
     this.headers = opts.headers || {};
     this.connection = null;
     this.subscriptions = {};
@@ -24,8 +24,8 @@ class ActionCable {
     this.connection_promise = this._connect();
   }
 
-  subscribe(name_or_options, callbacks) {
-    if (typeof name_or_options === "string") {
+  subscribe (name_or_options, callbacks) {
+    if (typeof name_or_options === 'string') {
       name_or_options = {
         channel: name_or_options
       };
@@ -34,7 +34,7 @@ class ActionCable {
     let name = name_or_options.channel;
 
     if(this.subscriptions[name]) {
-      throw "Already subscribed to this channel!";
+      throw 'Already subscribed to this channel!';
       return;
     }
 
@@ -58,7 +58,7 @@ class ActionCable {
 
   // PRIVATE
 
-  _connect() {
+  _connect () {
     return new Promise((resolve, reject) => {
       let connection = new WebSocket(this.cable_url, { origin: this.origin, headers: this.headers });
 
@@ -74,7 +74,7 @@ class ActionCable {
     });
   }
 
-  _handle_message(msg) {
+  _handle_message (msg) {
     let data = JSON.parse(msg);
 
     let type = data.type;
@@ -84,24 +84,24 @@ class ActionCable {
     let sub = this.subscriptions[identifier.channel]
 
     switch(type) {
-      case message_types.welcome:
-        break;
-      case message_types.ping:
-        this.last_heartbeat_timestamp = (+ new Date());
-        break;
-      case message_types.confirmation:
-        sub.callbacks.connected();
-        break;
-      case message_types.rejection:
-        sub.callbacks.rejected();
-        break;
-      default:
-        sub.callbacks.received(message);
-        break;
+    case message_types.welcome:
+      break;
+    case message_types.ping:
+      this.last_heartbeat_timestamp = (+ new Date());
+      break;
+    case message_types.confirmation:
+      sub.callbacks.connected();
+      break;
+    case message_types.rejection:
+      sub.callbacks.rejected();
+      break;
+    default:
+      sub.callbacks.received(message);
+      break;
     }
   }
 
-  _check_heartbeat() {
+  _check_heartbeat () {
     // return if we arent connected
     if(!this.connection && !this.last_heartbeat_timestamp) return;
 
@@ -113,8 +113,8 @@ class ActionCable {
     }
   }
 
-  _disconnected(err) {
-    this.logger.log("ActionCable -> socket disconnected");
+  _disconnected (err) {
+    this.logger.log('ActionCable -> socket disconnected');
     if(this.heartbeat_interval) { clearInterval(this.heartbeat_interval); this.logger.log('ActionCable -> Cleared the heartbeat interval'); }
 
     for(let sub in this.subscriptions) {
